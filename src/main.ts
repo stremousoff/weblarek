@@ -4,9 +4,8 @@ import { Products } from './components/models/product-list.ts';
 import { ShoppingCart } from './components/models/shopping-cart.ts';
 import { Buyer } from './components/models/buyer.ts';
 import { apiProducts } from './utils/data.ts';
-import { Product } from './components/models/product.ts';
 import {API_URL} from "./utils/constants.ts";
-import {IApiProducts} from "./types";
+import {IApiProducts, IProduct} from "./types";
 
 // ========== Инициализация моделей ==========
 const productsModel = new Products();
@@ -23,7 +22,7 @@ productsModel.setItems(apiProducts);
 console.log('Массив товаров из каталога:', productsModel.getItems());
 
 const idSelected = apiProducts.items[0].id;
-const selectedProduct: Product | undefined = productsModel.getItemById(idSelected);
+const selectedProduct: IProduct | undefined = productsModel.getItemById(idSelected);
 console.log(
   selectedProduct && selectedProduct.id === idSelected
     ? `Метод получения товара по ID ${idSelected} работает корректно`
@@ -79,7 +78,8 @@ console.log(
     : `Товара ${cartItem.id} нет в корзине`
 );
 
-console.log('Товар был удалён:', shoppingCart.removeItemFromCart(cartItem));
+console.log('Проверяем товары в корзине:', shoppingCart.getCartItems())
+shoppingCart.removeItemFromCart(cartItem);
 console.log('Оставшиеся товары в корзине:', shoppingCart.getCartItems());
 
 shoppingCart.removeAllItemsFromCart();
