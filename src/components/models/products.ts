@@ -1,11 +1,11 @@
-import { IProduct, IApiProducts } from '../../types';
+import { IProduct } from '../../types';
 
 export class Products {
   protected _allProducts: IProduct[] = [];
   protected _checkItem: IProduct | null = null;
 
-  setItems(apiProducts: IApiProducts) : void {
-    this._allProducts = apiProducts.items.map((item) => item);
+  setItems(apiProducts: IProduct[]) : void {
+    this._allProducts = apiProducts;
   }
 
   getItems() : IProduct[] {
@@ -17,17 +17,9 @@ export class Products {
   }
 
   setCheckItemById(id: string) : boolean {
-    const checkItem = this._allProducts.find((item) => item.id === id);
+    const checkItem = this.getItemById(id);
     if (checkItem) {
       this._checkItem = checkItem;
-      return true;
-    }
-    return false;
-  }
-
-  deleteCheckItem() : boolean {
-    if (this._checkItem) {
-      this._checkItem = null;
       return true;
     }
     return false;

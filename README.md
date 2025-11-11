@@ -152,17 +152,17 @@ interface IBuyer {
 
 Свойства:
 
-- `_allProducts: Product[]` - массив товаров
-- `_checkItem: Product | null = null` - выделенный товар для отображения в окне
+- `_allProducts: IProduct[]` - массив товаров
+- `_checkItem: IProduct[] | null = null` - выделенный товар для отображения в окне
 
 Методы:
 
-- `setItems(apiProducts: IApiProducts) : void` - сохраняет товары
-- `getItems() : Product[]` - получает массив товары
-- `getItemById(id: string) : Product | undefined` - получает товар по `id`
+- `setItems(apiProducts: IProduct[]) : void` - сохраняет товары
+- `getItems() : IProduct[]` - получает массив товары
+- `getItemById(id: string) : IProduct[] | undefined` - получает товар по `id`
 - `setCheckItemById(id: string) : boolean` - устанавливает товар для подробного отображения
 - `deleteCheckItemById() : boolean` - убирает товар для подробного отображения
-- `getCheckItem() : Product | null` - получает товар для подробного отображения
+- `getCheckItem() : IProduct | null` - получает товар для подробного отображения
 
 #### Корзина `ShoppingCart`
 

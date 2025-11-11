@@ -1,6 +1,6 @@
 import './scss/styles.scss';
 import { Api } from "./components/base/Api.ts";
-import { Products } from './components/models/product-list.ts';
+import { Products } from './components/models/products.ts';
 import { ShoppingCart } from './components/models/shopping-cart.ts';
 import { Buyer } from './components/models/buyer.ts';
 import { apiProducts } from './utils/data.ts';
@@ -17,7 +17,7 @@ const api = new Api(API_URL);
 console.group('🧱 Модель Products');
 
 // Сохраняем массив товаров в модели Products
-productsModel.setItems(apiProducts);
+productsModel.setItems(apiProducts.items);
 
 console.log('Массив товаров из каталога:', productsModel.getItems());
 
@@ -39,13 +39,6 @@ console.log(
 console.log(
   'Метод получения отмеченного товара для подробного отображения: ',
   productsModel.getCheckItem()
-);
-
-
-console.log(
-  productsModel.deleteCheckItem()
-    ? `Товар был удалён из подробного отображения`
-    : `Товар не был удалён из подробного отображения`
 );
 
 console.log(
