@@ -96,7 +96,7 @@ console.log('Обновлённые данные покупателя:', buyer);
 errors = buyer.validate();
 if (errors && Object.keys(errors).length) console.warn('Ошибки валидации после обновления:', errors);
 
-buyer.address = 'Простоквашино';
+buyer.update({address: 'Простоквашино'});
 console.log('После добавления адреса:', buyer);
 
 errors = buyer.validate();
