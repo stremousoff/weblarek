@@ -1,20 +1,20 @@
-import {Product} from "./product.ts";
+import { IProduct } from '../../types';
 
 
 export class ShoppingCart {
-  private _cartItems: Product[] = [];
+  private _cartItems: IProduct[] = [];
 
-  getCartItems() : Product[] {
+  getCartItems() : IProduct[] {
     return this._cartItems;
   }
 
-  addToCart(product: Product) : void {
+  addToCart(product: IProduct) : void {
     product.price != null
       ? this._cartItems.push(product)
       : console.log(`Товар ${product} не был добавлен в корзину, отсутствует цена`);
   }
 
-  removeItemFromCart(product: Product) : Product | undefined {
+  removeItemFromCart(product: IProduct) : IProduct | undefined {
     const removeIndex = this._cartItems.findIndex(item => item.id === product.id);
     const removedItem = this._cartItems[removeIndex];
     this._cartItems.splice(removeIndex, 1);

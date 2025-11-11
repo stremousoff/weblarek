@@ -1,5 +1,3 @@
-import {Buyer} from "../components/models/buyer.ts";
-
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 
 // Типы способов оплаты у покупателя
