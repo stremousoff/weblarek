@@ -38,9 +38,9 @@ console.log(
 );
 
 console.log(
-  productsModel.deleteCheckItemById(idCheck)
-    ? `Товар с ID ${idCheck} был удалён из подробного отображения`
-    : `Товар с ID ${idCheck} не был удалён из подробного отображения`
+  productsModel.deleteCheckItem()
+    ? `Товар был удалён из подробного отображения`
+    : `Товар не был удалён из подробного отображения`
 );
 
 console.groupEnd();

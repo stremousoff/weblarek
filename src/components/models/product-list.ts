@@ -26,8 +26,8 @@ export class Products {
     return false;
   }
 
-  deleteCheckItemById(id: string) : boolean {
-    if (this._checkItem && this._checkItem.id === id) {
+  deleteCheckItem() : boolean {
+    if (this._checkItem) {
       this._checkItem = null;
       return true;
     }
