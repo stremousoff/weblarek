@@ -1,7 +1,7 @@
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 
 // Типы способов оплаты у покупателя
-export type TPayment = 'cash' | 'card';
+export type TPayment = 'cash' | 'card' | '';
 
 export interface IApi {
   get<T extends object>(uri: string): Promise<T>;
