@@ -38,9 +38,20 @@ console.log(
 );
 
 console.log(
+  'Метод получения отмеченного товара для подробного отображения: ',
+  productsModel.getCheckItem()
+);
+
+
+console.log(
   productsModel.deleteCheckItem()
     ? `Товар был удалён из подробного отображения`
     : `Товар не был удалён из подробного отображения`
+);
+
+console.log(
+  'Проверяем действительно ли товар был удален из подробного отображения: ',
+  productsModel.getCheckItem()
 );
 
 console.groupEnd();

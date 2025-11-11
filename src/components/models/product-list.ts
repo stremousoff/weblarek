@@ -33,4 +33,8 @@ export class Products {
     }
     return false;
   }
+
+  getCheckItem() : Product | null {
+    return this._checkItem;
+  }
 }
