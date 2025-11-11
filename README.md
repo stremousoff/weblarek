@@ -160,8 +160,9 @@ interface IBuyer {
 - `setItems(apiProducts: IApiProducts) : void` - сохраняет товары
 - `getItems() : Product[]` - получает массив товары
 - `getItemById(id: string) : Product | undefined` - получает товар по `id`
-- `setCheckItemById(id: string) : boolean` - устанавливает товар для отображения
-- `deleteCheckItemById(id: string) : boolean` - убирает товар для отображения
+- `setCheckItemById(id: string) : boolean` - устанавливает товар для подробного отображения
+- `deleteCheckItemById() : boolean` - убирает товар для подробного отображения
+- `getCheckItem() : Product | null` - получает товар для подробного отображения
 
 #### Корзина `ShoppingCart`
 
