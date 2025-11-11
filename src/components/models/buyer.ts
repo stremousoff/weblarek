@@ -1,4 +1,4 @@
-import {IBuyer, IErrors, TPayment} from "../../types";
+import {IBuyer, TFormErrors, TPayment} from "../../types";
 
 
 export class Buyer implements IBuyer {
@@ -26,8 +26,8 @@ export class Buyer implements IBuyer {
     this._address = value;
   }
 
-  validate(): IErrors | void {
-    const errors: IErrors = {};
+  validate(): TFormErrors | void {
+    const errors: TFormErrors = {};
 
     if (!this._payment) errors.payment = 'Выберите способ оплаты';
     if (!this._email?.trim()) errors.email = 'Email не может быть пустым';

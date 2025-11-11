@@ -1,7 +1,12 @@
+import {Buyer} from "../components/models/buyer.ts";
+
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 
 // Типы способов оплаты у покупателя
 export type TPayment = 'cash' | 'card' | '';
+
+// Тип ошибок валидации формы
+export type TFormErrors = Partial<Record<keyof IBuyer, string>>
 
 export interface IApi {
   get<T extends object>(uri: string): Promise<T>;
@@ -21,14 +26,6 @@ export interface IProduct {
 // Интерфейс покупателя
 export interface IBuyer {
   payment?: TPayment;
-  email?: string;
-  phone?: string;
-  address?: string;
-}
-
-// Интерфейс валидации ошибок в форме
-export interface IErrors {
-  payment?: string;
   email?: string;
   phone?: string;
   address?: string;
