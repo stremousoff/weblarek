@@ -14,11 +14,8 @@ export class ShoppingCart {
       : console.log(`Товар ${product} не был добавлен в корзину, отсутствует цена`);
   }
 
-  removeItemFromCart(product: IProduct) : IProduct | undefined {
-    const removeIndex = this._cartItems.findIndex(item => item.id === product.id);
-    const removedItem = this._cartItems[removeIndex];
-    this._cartItems.splice(removeIndex, 1);
-    return removedItem;
+  removeItemFromCart(product: IProduct) : void {
+    this._cartItems= this._cartItems.filter((item) => item.id !== product.id);
   }
 
   removeAllItemsFromCart() : void {

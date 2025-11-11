@@ -170,13 +170,13 @@ interface IBuyer {
 
 Свойства:
 
-- `_cartItems: Product[] = []` - массив товаров, добавленных в корзину
+- `_cartItems: IProduct[] = []` - массив товаров, добавленных в корзину
 
 Методы:
 
-- `getCartItems() : Product[]` - получение массива товаров, которые находятся в корзине
-- `addToCart(product: Product) : void` - добавление товара
-- `removeItemFromCart(product: Product) : Product | undefined` - удаление товара
+- `getCartItems() : IProduct[]` - получение массива товаров, которые находятся в корзине
+- `addToCart(product: IProduct) : void` - добавление товара
+- `removeItemFromCart(product: IProduct) : void` - удаление товара
 - `removeAllItemsFromCart() : void` - очистка корзины
 - `getCartTotalPrice() : number` - получение стоимости всех товаров в корзине
 - `getCartTotalQuantity() : number ` - получение количества товаров в корзине
