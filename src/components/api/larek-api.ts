@@ -1,4 +1,4 @@
-import {IApi, IApiProducts, TOrder} from "../../types";
+import {IApi, IApiProducts, TOrder, TOrderResponse} from "../../types";
 
 
 export class LarekApi {
@@ -12,7 +12,7 @@ export class LarekApi {
     return this.api.get(url)
   }
 
-  async post(data: object) : Promise<TOrder> {
+  async post(data: TOrder) : Promise<TOrderResponse> {
     const url = '/order/'
     return this.api.post(url, data)
   }

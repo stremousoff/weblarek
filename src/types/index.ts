@@ -13,7 +13,12 @@ export type TOrder = {
   phone: string,
   address: string,
   total: number,
-  items: IProduct[]
+  items: string[]
+}
+
+export type TOrderResponse = {
+  id: string,
+  total: number,
 }
 
 export interface IApi {
