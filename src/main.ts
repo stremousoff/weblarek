@@ -3,7 +3,7 @@ import { Products } from './components/models/products.ts';
 import { ShoppingCart } from './components/models/shopping-cart.ts';
 import { Buyer } from './components/models/buyer.ts';
 import { apiProducts } from './utils/data.ts';
-import { IProduct } from "./types";
+import {IApiProducts, IProduct} from "./types";
 import {LarekApi} from "./components/api/larek-api.ts";
 import {Api} from "./components/base/Api.ts";
 import {API_URL} from "./utils/constants.ts";
@@ -112,8 +112,8 @@ console.groupEnd();
 // ========== 📊 Модель Api ==========
 console.group('========== 📊 Модель Api ==========');
 try {
-  const products = await api.get();
-  console.log('Данные полученные с API', products);
+  const response: IApiProducts = await api.get();
+  console.log('Данные полученные с API', response.items);
 } catch (error) {
   console.error('Ошибка при загрузке товаров:', error);
 }
