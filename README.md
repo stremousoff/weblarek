@@ -198,3 +198,15 @@ interface IBuyer {
 - `update(date: Partial<IBuyer>): void` - частичное обновление данных
 - `validate(): IErrors | void` - проверка данных покупателя
 - `clear(): void` - очищает данные покупателя
+
+### Слой коммуникации `LarekApi`
+
+Конструктор:
+
+- `constuctor(api: IApi)` - в конструктор передается экземпляр класса, соответсвующий интерфейсу `IApi`
+
+Методы класса:
+
+- `getProducts(): Promise<IGetProductsApiResponse>` - получает с сервера объект с массивом товаров
+- `order(data: IOrderApiRequest): Promise<IOrderApiResponse>` - отправляет на сервер данные о покупателе и выбранных
+  товарах

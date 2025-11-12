@@ -6,6 +6,16 @@ export type TPayment = 'cash' | 'card' | '';
 // Тип ошибок валидации формы
 export type TFormErrors = Partial<Record<keyof IBuyer, string>>
 
+//Тип тела запроса заказа пользователя
+export type TOrder = {
+  payment: 'cash' | 'card',
+  email: string,
+  phone: string,
+  address: string,
+  total: number,
+  items: IProduct[]
+}
+
 export interface IApi {
   get<T extends object>(uri: string): Promise<T>;
   post<T extends object>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;

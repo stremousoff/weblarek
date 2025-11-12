@@ -1,17 +1,18 @@
 import './scss/styles.scss';
-import { Api } from "./components/base/Api.ts";
 import { Products } from './components/models/products.ts';
 import { ShoppingCart } from './components/models/shopping-cart.ts';
 import { Buyer } from './components/models/buyer.ts';
 import { apiProducts } from './utils/data.ts';
+import { IProduct } from "./types";
+import {LarekApi} from "./components/api/larek-api.ts";
+import {Api} from "./components/base/Api.ts";
 import {API_URL} from "./utils/constants.ts";
-import {IApiProducts, IProduct} from "./types";
 
 // ========== Инициализация моделей ==========
 const productsModel = new Products();
 const shoppingCart = new ShoppingCart();
 const buyer = new Buyer();
-const api = new Api(API_URL);
+const api = new LarekApi(new Api(API_URL));
 
 // ========== 🧱 Модель Products ==========
 console.group('🧱 Модель Products');
@@ -110,6 +111,12 @@ console.groupEnd();
 // Тестируем работу с API
 // ========== 📊 Модель Api ==========
 console.group('========== 📊 Модель Api ==========');
-const products: IApiProducts = await api.get('/product/');
-console.log('Данные полученные с API', products)
+try {
+  const products = await api.get();
+  console.log('Данные полученные с API', products);
+} catch (error) {
+  console.error('Ошибка при загрузке товаров:', error);
+}
+
+
 
