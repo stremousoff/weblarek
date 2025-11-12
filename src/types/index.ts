@@ -18,7 +18,7 @@ export type TOrder = {
 
 export type TOrderResponse = {
   id: string,
-  total: number,
+  total: number
 }
 
 export interface IApi {
