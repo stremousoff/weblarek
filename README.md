@@ -207,6 +207,6 @@ interface IBuyer {
 
 Методы класса:
 
-- `getProducts(): Promise<IGetProductsApiResponse>` - получает с сервера объект с массивом товаров
-- `order(data: IOrderApiRequest): Promise<IOrderApiResponse>` - отправляет на сервер данные о покупателе и выбранных
+- `get(): Promise<IApiProducts>` - получает с сервера объект с массивом товаров
+- `post(data: IOrderApiRequest): Promise<TOrder>` - отправляет на сервер данные о покупателе и выбранных
   товарах
