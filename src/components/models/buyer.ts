@@ -22,7 +22,7 @@ export class Buyer {
     if (!this.phone?.trim()) errors.phone = 'Телефон не может быть пустым';
     if (!this.address?.trim()) errors.address = 'Адрес не может быть пустым';
 
-    if (errors) return errors;
+    if (Object.keys(errors).length) return errors;
 
   }
 
