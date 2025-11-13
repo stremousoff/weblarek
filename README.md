@@ -196,7 +196,7 @@ interface IBuyer {
 Методы:
 
 - `update(date: Partial<IBuyer>): void` - частичное обновление данных
-- `validate(): IErrors | void` - проверка данных покупателя
+- `validate(): IErrors | undefined` - проверка данных покупателя
 - `clear(): void` - очищает данные покупателя
 
 ### Слой коммуникации `LarekApi`

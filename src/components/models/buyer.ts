@@ -14,7 +14,7 @@ export class Buyer {
     if (date.address) this.address = date.address;
   }
 
-  validate(): TFormErrors | void {
+  validate(): TFormErrors | undefined {
     const errors: TFormErrors = {};
 
     if (!this.payment) errors.payment = 'Выберите способ оплаты';
@@ -22,7 +22,7 @@ export class Buyer {
     if (!this.phone?.trim()) errors.phone = 'Телефон не может быть пустым';
     if (!this.address?.trim()) errors.address = 'Адрес не может быть пустым';
 
-    if (Object.keys(errors).length) return errors;
+    return Object.keys(errors).length ? errors : undefined;
 
   }
 

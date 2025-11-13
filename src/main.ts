@@ -89,7 +89,7 @@ buyer.update({ payment: 'card' });
 console.log('Создан покупатель с данными:', buyer);
 
 let errors = buyer.validate();
-if (errors && Object.keys(errors).length) console.warn('Ошибки валидации:', errors);
+if (errors) console.warn('Ошибки валидации:', errors);
 
 buyer.update({ email: 'mail@mail.com', phone: '+123456789' });
 console.log('Обновлённые данные покупателя:', buyer);
