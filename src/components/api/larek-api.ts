@@ -7,11 +7,11 @@ export class LarekApi {
   constructor(api: IApi) {
     this.api = api
   }
-  async get(url: string = '/product/') : Promise<IApiProducts> {
-    return this.api.get(url)
+  async get() : Promise<IApiProducts> {
+    return this.api.get('/product/')
   }
 
-  async post(data: TOrder, url: string = '/order/') : Promise<TOrderResponse> {
-    return this.api.post(url, data)
+  async post(data: TOrder) : Promise<TOrderResponse> {
+    return this.api.post('/order/', data)
   }
 }
