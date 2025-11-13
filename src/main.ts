@@ -113,7 +113,9 @@ console.groupEnd();
 console.group('========== 📊 Модель Api ==========');
 try {
   const response: IApiProducts = await api.get();
-  console.log('Список товаров полученный с API', response.items);
+  console.log('Перезаписываем товары из тестовой базы товарами из API');
+  productsModel.setItems(response.items)
+  console.log('Товары полученные из API: ', productsModel.getItems())
 } catch (error) {
   console.error('Ошибка при загрузке товаров:', error);
 }
