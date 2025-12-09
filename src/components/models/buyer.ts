@@ -7,23 +7,24 @@ export class Buyer {
   protected phone?: string = '';
   protected address?: string = '';
 
-  update(date: Partial<IBuyer>): void {
-    if (date.payment) this.payment = date.payment;
-    if (date.email) this.email = date.email;
-    if (date.phone) this.phone = date.phone;
-    if (date.address) this.address = date.address;
+  getPayment() { return this.payment; }
+  getAddress() { return this.address; }
+  getEmail() { return this.email; }
+  getPhone() { return this.phone; }
+
+  update(data: Partial<IBuyer>) {
+    Object.assign(this, data);
   }
 
-  validate(): TFormErrors | undefined {
+  validate(): TFormErrors {
     const errors: TFormErrors = {};
 
-    if (!this.payment) errors.payment = 'Выберите способ оплаты';
-    if (!this.email?.trim()) errors.email = 'Email не может быть пустым';
-    if (!this.phone?.trim()) errors.phone = 'Телефон не может быть пустым';
-    if (!this.address?.trim()) errors.address = 'Адрес не может быть пустым';
+    if (!this.payment) errors.payment = 'Необходимо выбрать способ оплаты';
+    if (!this.email?.trim()) errors.email = 'Необходимо указать email';
+    if (!this.phone?.trim()) errors.phone = 'Необходимо указать телефон';
+    if (!this.address?.trim()) errors.address = 'Необходимо указать адрес';
 
-    return Object.keys(errors).length ? errors : undefined;
-
+    return errors;
   }
 
   clear(): void {
