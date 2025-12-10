@@ -21,8 +21,8 @@ import {Header} from "./components/view/Header.ts";
 import {Gallery} from "./components/view/Gallery.ts";
 import {CardBasket} from "./components/view/card/CardBasket.ts";
 import {Basket} from "./components/view/Basket.ts";
-import {Order} from "./components/view/Form/Order.ts";
-import {Contacts} from "./components/view/Form/Contacts.ts";
+import {Order} from "./components/view/form/Order.ts";
+import {Contacts} from "./components/view/form/Contacts.ts";
 import {Success} from "./components/view/Success.ts";
 
 
@@ -173,7 +173,7 @@ eventBroker.on('contacts:update', (data: { phone?: string; email?: string }) => 
   if (data.email) contacts.setEmail(data.email);
 })
 
-function buildOrder(): TOrder | null {
+eventBroker.on('success:show', async () => {
   const payment = buyer.getPayment();
   const email = buyer.getEmail();
   const phone = buyer.getPhone();
@@ -183,26 +183,21 @@ function buildOrder(): TOrder | null {
 
   const cartItems: IProduct[] = shoppingCart.getCartItems();
 
-  return {
+  const data: TOrder = {
     payment,
     email,
     phone,
     address,
     total: shoppingCart.getCartTotalPrice(),
     items: cartItems.map((item: IProduct) => item.id)
-  }
-}
-eventBroker.on('success:show', async () => {
-  const data: TOrder | null = buildOrder();
-  if (data) {
-    try {
-      const response: TOrderResponse = await api.postOrder(data);
-      modal.open(success.render());
-      success.orderSuccessDescription = response.total;
-      modal.open(success.render());
-    } catch (error) {
-      console.error('Ошибка при отправке заказа:', error);
-    }
+  };
+
+  try {
+    const response: TOrderResponse = await api.postOrder(data);
+    success.orderSuccessDescription = response.total;
+    modal.open(success.render());
+  } catch (error) {
+    console.error('Ошибка при отправке заказа:', error);
   }
 });
 

@@ -7,11 +7,6 @@ export class Buyer {
   protected phone?: string = '';
   protected address?: string = '';
 
-  getPayment() { return this.payment; }
-  getAddress() { return this.address; }
-  getEmail() { return this.email; }
-  getPhone() { return this.phone; }
-
   update(data: Partial<IBuyer>) {
     Object.assign(this, data);
   }
@@ -33,4 +28,9 @@ export class Buyer {
     this.phone = undefined;
     this.address = undefined;
   }
+
+  getPayment() { return this.payment; }
+  getAddress() { return this.address; }
+  getEmail() { return this.email; }
+  getPhone() { return this.phone; }
 }
