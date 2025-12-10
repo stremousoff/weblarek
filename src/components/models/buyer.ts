@@ -1,6 +1,5 @@
 import {IBuyer, TFormErrors, TPayment} from "../../types";
 
-
 export class Buyer {
   protected payment?: TPayment = '';
   protected email?: string = '';
