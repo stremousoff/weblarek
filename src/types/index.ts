@@ -49,3 +49,8 @@ export interface IApiProducts {
   total: number;
   items: IProduct[];
 }
+
+// Интерфейс клика по кнопке
+export interface ICardAction {
+  onClick: () => void;
+}
