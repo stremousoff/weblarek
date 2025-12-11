@@ -21,8 +21,8 @@ import {Header} from "./components/view/Header.ts";
 import {Gallery} from "./components/view/Gallery.ts";
 import {CardBasket} from "./components/view/card/CardBasket.ts";
 import {Basket} from "./components/view/Basket.ts";
-import {Order} from "./components/view/form/Order.ts";
-import {Contacts} from "./components/view/form/Contacts.ts";
+import {OrderForm} from "./components/view/form/OrderForm.ts";
+import {ContactsForm} from "./components/view/form/ContactsForm.ts";
 import {Success} from "./components/view/Success.ts";
 
 
@@ -49,8 +49,8 @@ const cardsGalleryModel = new Gallery(galleryContainer);
 const modal = new Modal(modalContainer);
 const shoppingCart = new ShoppingCart(eventBroker);
 const buyer = new Buyer();
-const order = new Order(cloneTemplate(orderTemplate), eventBroker);
-const contacts = new Contacts(cloneTemplate(contactsTemplate), eventBroker);
+const order = new OrderForm(cloneTemplate(orderTemplate), eventBroker);
+const contacts = new ContactsForm(cloneTemplate(contactsTemplate), eventBroker);
 const success = new Success(cloneTemplate(successTemplate), eventBroker);
 
 // ========== Подписки на события ==========
@@ -127,7 +127,6 @@ eventBroker.on('order:set', () => {
 
   const payment = buyer.getPayment();
   if (payment) order.setPaymentButtonActive(payment);
-
 
   const errors: TFormErrors = buyer.validate();
   if (errors.address && errors.payment) return;

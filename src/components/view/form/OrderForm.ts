@@ -1,21 +1,17 @@
-import { Component } from "../../base/Component.ts";
 import { ensureAllElements, ensureElement } from "../../../utils/utils.ts";
 import { IEvents } from "../../base/Events.ts";
-import { TFormErrors, TPayment } from "../../../types";
+import { TPayment } from "../../../types";
+import { BaseForm } from "./BaseForm.ts";
 
-export class Order extends Component<null> {
+export class OrderForm extends BaseForm {
   private _paymentButtons: HTMLButtonElement[];
   private _addressInput: HTMLInputElement;
-  private _formErrors: HTMLElement;
-  private _submitButton: HTMLButtonElement;
 
   constructor(container: HTMLElement, private event: IEvents) {
     super(container);
 
     this._paymentButtons = ensureAllElements<HTMLButtonElement>('.button_alt', this.container);
     this._addressInput = ensureElement<HTMLInputElement>('.form__input', this.container);
-    this._formErrors = ensureElement<HTMLElement>('.form__errors', this.container);
-    this._submitButton = ensureElement<HTMLButtonElement>('.order__button', this.container);
 
     this._paymentButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -31,14 +27,6 @@ export class Order extends Component<null> {
       evt.preventDefault();
       this.event.emit('contacts:set');
     });
-  }
-
-  showErrors(errors: TFormErrors) {
-    this._formErrors.textContent = errors.address || errors.payment || '';
-  }
-
-  submitButton(enabled: boolean) {
-    this._submitButton.disabled = !enabled;
   }
 
   setPaymentButtonActive(payment: TPayment) {
