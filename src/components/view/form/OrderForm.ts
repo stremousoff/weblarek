@@ -1,11 +1,13 @@
 import { ensureAllElements, ensureElement } from "../../../utils/utils.ts";
 import { IEvents } from "../../base/Events.ts";
-import { TPayment } from "../../../types";
+import {TFormErrors, TPayment} from "../../../types";
 import { BaseForm } from "./BaseForm.ts";
 
 export class OrderForm extends BaseForm {
   private _paymentButtons: HTMLButtonElement[];
   private _addressInput: HTMLInputElement;
+
+  protected _formErrorsFields: (keyof TFormErrors)[] = ['payment', 'address'];
 
   constructor(container: HTMLElement, private event: IEvents) {
     super(container);
@@ -15,7 +17,16 @@ export class OrderForm extends BaseForm {
 
     this._paymentButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        this.event.emit('order:update', { payment: btn.name as TPayment });
+        const currentActive = this._paymentButtons.find(b => b.classList.contains('button_alt-active'));
+
+        if (currentActive === btn) {
+          btn.classList.remove('button_alt-active');
+          this.event.emit('order:update', { payment: undefined });
+        } else {
+          this._paymentButtons.forEach(b => b.classList.remove('button_alt-active'));
+          btn.classList.add('button_alt-active');
+          this.event.emit('order:update', { payment: btn.name as TPayment });
+        }
       });
     });
 

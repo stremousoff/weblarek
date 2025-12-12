@@ -22,6 +22,7 @@ export class ShoppingCart {
   removeItemFromCart(product: IProduct) : void {
     this._cartItems= this._cartItems.filter((item) => item.id !== product.id);
     this.eventBroker.emit('change:counter', { value: this.getCartTotalQuantity() });
+    this.eventBroker.emit('shoppingCart:update', this._cartItems);
   }
 
   removeAllItemsFromCart() : void {

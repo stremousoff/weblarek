@@ -1,10 +1,13 @@
 import { ensureElement } from "../../../utils/utils.ts";
 import { IEvents } from "../../base/Events.ts";
 import { BaseForm } from "./BaseForm.ts";
+import {TFormErrors} from "../../../types";
 
 export class ContactsForm extends BaseForm {
   private _emailInput: HTMLInputElement;
   private _phoneInput: HTMLInputElement;
+
+  protected _formErrorsFields: (keyof TFormErrors)[] = ['email', 'phone'];
 
   constructor(container: HTMLElement, private event: IEvents) {
     super(container);

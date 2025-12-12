@@ -1,4 +1,5 @@
 import './scss/styles.scss';
+
 import { Products } from './components/models/products.ts';
 import { ShoppingCart } from './components/models/shopping-cart.ts';
 import { Buyer } from './components/models/buyer.ts';
@@ -44,47 +45,58 @@ const successTemplate = document.getElementById('success') as HTMLTemplateElemen
 const api = new LarekApi(new Api(API_URL));
 const eventBroker = new EventEmitter();
 const productsModel = new Products(eventBroker);
-const headerModel = new Header(headerContainer, eventBroker);
-const cardsGalleryModel = new Gallery(galleryContainer);
-const modal = new Modal(modalContainer);
-const shoppingCart = new ShoppingCart(eventBroker);
-const buyer = new Buyer();
-const order = new OrderForm(cloneTemplate(orderTemplate), eventBroker);
-const contacts = new ContactsForm(cloneTemplate(contactsTemplate), eventBroker);
-const success = new Success(cloneTemplate(successTemplate), eventBroker);
+const shoppingCartModel = new ShoppingCart(eventBroker);
+const buyerModel = new Buyer(eventBroker);
+
+// ========== Инициализация представлений ==========
+const headerView = new Header(headerContainer, eventBroker);
+const galleryView = new Gallery(galleryContainer);
+const basketView = new Basket(cloneTemplate(basketTemplate), eventBroker);
+const modalView = new Modal(modalContainer);
+const orderFormView = new OrderForm(cloneTemplate(orderTemplate), eventBroker);
+const contactFormView = new ContactsForm(cloneTemplate(contactsTemplate), eventBroker);
+const successView = new Success(cloneTemplate(successTemplate), eventBroker);
 
 // ========== Подписки на события ==========
 eventBroker.on('change:counter', () => {
-  headerModel.counter = shoppingCart.getCartTotalQuantity()
+  headerView.counter = shoppingCartModel.getCartTotalQuantity()
+  headerView.render();
 })
 
 eventBroker.on('shoppingCart:open', () => {
-  const basket = new Basket(cloneTemplate(basketTemplate), () => eventBroker.emit('order:set'));
-  const totalPrice = shoppingCart.getCartTotalPrice();
-  if (totalPrice === 0) {
-    basket.buttonOrder = false;
-    return modal.open(basket.render({cards: []}));
-  }
-  const itemsBasketEl: HTMLElement[] = shoppingCart.getCartItems().map(
-    (item: IProduct, index: number) => {
-      const cardBasketEl = new CardBasket(
+  const cardsBasketEl: HTMLElement[] = shoppingCartModel.getCartItems().map(
+    (cartItem, index) => {
+    const cardBasketEl  = new CardBasket(
         cloneTemplate(cardBasketTemplate),
-        {onClick: () => eventBroker.emit('cardBasket:remove', item)}
-      )
-      cardBasketEl.index = index + 1
+        {onClick: () => eventBroker.emit('cardBasket:remove', cartItem)}
+      );
+    cardBasketEl.index = index + 1;
+    return cardBasketEl.render(cartItem);
+    });
 
-      return cardBasketEl.render(item)
-    }
-  )
-  basket.basketPrice = totalPrice;
-  basket.buttonOrder = true;
-  modal.open(basket.render({cards: itemsBasketEl}))
+  basketView.setCards(cardsBasketEl);
+  basketView.basketPrice = shoppingCartModel.getCartTotalPrice();
+  basketView.buttonOrder = shoppingCartModel.getCartTotalQuantity() > 0;
+  modalView.open(basketView.render());
 })
 
 eventBroker.on('cardBasket:remove', (item: IProduct) => {
-  shoppingCart.removeItemFromCart(item);
-  eventBroker.emit('shoppingCart:open');
+  shoppingCartModel.removeItemFromCart(item);
 })
+
+eventBroker.on('shoppingCart:update', (items: IProduct[]) => {
+  const cardsBasketEl: HTMLElement[] = items.map((item, index) => {
+    const card = new CardBasket(cloneTemplate(cardBasketTemplate), {
+      onClick: () => shoppingCartModel.removeItemFromCart(item) // только модель меняет данные
+    });
+    card.index = index + 1;
+    return card.render(item);
+  });
+
+  basketView.setCards(cardsBasketEl);
+  basketView.basketPrice = shoppingCartModel.getCartTotalPrice();
+  basketView.buttonOrder = shoppingCartModel.getCartTotalQuantity() > 0;
+});
 
 eventBroker.on('products:loaded', (items: IProduct[]) => {
   const cardElements: HTMLElement[] = items.map(product => {
@@ -96,7 +108,7 @@ eventBroker.on('products:loaded', (items: IProduct[]) => {
     return card.render(product);
   });
 
-  cardsGalleryModel.render({cards: cardElements});
+  galleryView.render({cards: cardElements});
 });
 
 eventBroker.on('card:select', (product: IProduct) => {
@@ -104,106 +116,106 @@ eventBroker.on('card:select', (product: IProduct) => {
   const cardElement: CardPreview = new CardPreview(cardEl, {
     onClick: () => eventBroker.emit('cardButton:click', product)
   });
-  cardElement.inCart = shoppingCart.checkItemInCart(product.id);
-  modal.open(cardElement.render(product));
+  cardElement.inCart = shoppingCartModel.checkItemInCart(product.id);
+  modalView.open(cardElement.render(product));
 });
 
 eventBroker.on('cardButton:click', (product: IProduct) => {
   const cardButton = document.querySelector('.card__button') as HTMLElement;
-  if (shoppingCart.checkItemInCart(product.id)) {
-    shoppingCart.removeItemFromCart(product);
+  if (shoppingCartModel.checkItemInCart(product.id)) {
+    shoppingCartModel.removeItemFromCart(product);
     cardButton.textContent = 'Купить';
   } else {
     cardButton.textContent = 'Удалить из корзины'
-    shoppingCart.addToCart(product);
+    shoppingCartModel.addToCart(product);
   }
 });
 
 eventBroker.on('order:set', () => {
-  modal.open(order.render());
+  modalView.open(orderFormView.render());
 
-  const address = buyer.getAddress();
-  if (address) order.setAddress(address);
+  const address = buyerModel.getAddress();
+  if (address) orderFormView.setAddress(address);
 
-  const payment = buyer.getPayment();
-  if (payment) order.setPaymentButtonActive(payment);
+  const payment = buyerModel.getPayment();
+  if (payment) orderFormView.setPaymentButtonActive(payment);
 
-  const errors: TFormErrors = buyer.validate();
+  const errors: TFormErrors = buyerModel.validate();
   if (errors.address && errors.payment) return;
-  order.showErrors(errors);
-  order.submitButton(!errors.address && !errors.payment);
+  orderFormView.showErrors(errors);
+  orderFormView.submitButton(!errors.address && !errors.payment);
 });
 
 eventBroker.on('order:update', (data: { address?: string; payment?: TPayment }) => {
-  buyer.update(data);
-
-  const errors: TFormErrors = buyer.validate();
-  order.showErrors(errors);
-  order.submitButton(!errors.address && !errors.payment);
-
-  if (data.payment) order.setPaymentButtonActive(data.payment);
-  if (data.address) order.setAddress(data.address);
+  buyerModel.update(data);
 });
 
 eventBroker.on('contacts:set', () => {
-  modal.open(contacts.render());
+  modalView.open(contactFormView.render());
 
-  const email = buyer.getEmail();
-  if (email) contacts.setEmail(email);
+  const email = buyerModel.getEmail();
+  if (email) contactFormView.setEmail(email);
 
-  const phone = buyer.getPhone();
-  if (phone) contacts.setPhone(phone);
+  const phone = buyerModel.getPhone();
+  if (phone) contactFormView.setPhone(phone);
 
 
-  const errors: TFormErrors = buyer.validate();
+  const errors: TFormErrors = buyerModel.validate();
   if (errors.email && errors.phone) return;
-  contacts.showErrors(errors);
-  contacts.submitButton(!errors.email && !errors.phone);
+  contactFormView.showErrors(errors);
+  contactFormView.submitButton(!errors.email && !errors.phone);
 });
 
 eventBroker.on('contacts:update', (data: { phone?: string; email?: string }) => {
-  buyer.update(data);
-
-  const errors: TFormErrors = buyer.validate();
-  contacts.showErrors(errors);
-  contacts.submitButton(!errors.address && !errors.payment);
-
-  if (data.phone) contacts.setPhone(data.phone);
-  if (data.email) contacts.setEmail(data.email);
+  buyerModel.update(data);
 })
 
+eventBroker.on('buyer:update', (buyer: Buyer) => {
+  orderFormView.setAddress(buyer.getAddress() || '');
+  orderFormView.setPaymentButtonActive(buyer.getPayment() || '');
+  const orderValid = orderFormView.showErrors(buyer.validate());
+  orderFormView.submitButton(orderValid);
+
+  contactFormView.setEmail(buyer.getEmail() || '');
+  contactFormView.setPhone(buyer.getPhone() || '');
+  const contactsValid = contactFormView.showErrors(buyer.validate());
+  contactFormView.submitButton(contactsValid);
+});
+
+
+
+
 eventBroker.on('success:show', async () => {
-  const payment = buyer.getPayment();
-  const email = buyer.getEmail();
-  const phone = buyer.getPhone();
-  const address = buyer.getAddress();
+  const payment = buyerModel.getPayment();
+  const email = buyerModel.getEmail();
+  const phone = buyerModel.getPhone();
+  const address = buyerModel.getAddress();
 
   if (!payment || !email || !phone || !address) return null;
 
-  const cartItems: IProduct[] = shoppingCart.getCartItems();
+  const cartItems: IProduct[] = shoppingCartModel.getCartItems();
 
   const data: TOrder = {
     payment,
     email,
     phone,
     address,
-    total: shoppingCart.getCartTotalPrice(),
+    total: shoppingCartModel.getCartTotalPrice(),
     items: cartItems.map((item: IProduct) => item.id)
   };
 
   try {
     const response: TOrderResponse = await api.postOrder(data);
-    success.orderSuccessDescription = response.total;
-    modal.open(success.render());
+    successView.orderSuccessDescription = response.total;
+    shoppingCartModel.removeAllItemsFromCart()
+    modalView.open(successView.render());
   } catch (error) {
     console.error('Ошибка при отправке заказа:', error);
   }
 });
 
 eventBroker.on('success:close', () => {
-  buyer.clear();
-  shoppingCart.removeAllItemsFromCart()
-  modal.close();
+  modalView.close();
 });
 
 

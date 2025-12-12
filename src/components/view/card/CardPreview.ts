@@ -1,6 +1,7 @@
 import {ensureElement} from "../../../utils/utils.ts";
 import {ICardAction, IProduct} from "../../../types";
 import {CardBase} from "./CardBase.ts";
+import {categoryMap} from "../../../utils/constants.ts";
 
 export class CardPreview extends CardBase<IProduct> {
   protected _cardCategory: HTMLElement;
@@ -23,6 +24,8 @@ export class CardPreview extends CardBase<IProduct> {
 
   set category(value: string) {
     this._cardCategory.textContent = value;
+    this._cardCategory.classList.remove(...Object.values(categoryMap));
+    this._cardCategory.classList.add(categoryMap[value as keyof typeof categoryMap]);
   }
 
   set image(value: string) {
