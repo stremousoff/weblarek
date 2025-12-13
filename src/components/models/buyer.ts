@@ -12,7 +12,7 @@ export class Buyer {
 
   update(data: Partial<IBuyer>) {
     Object.assign(this, data);
-    this.events.emit('buyer:update', this);
+    this.events.emit('buyer:update');
   }
 
   validate(): TFormErrors {
@@ -33,8 +33,8 @@ export class Buyer {
     this.address = undefined;
   }
 
-  getPayment() { return this.payment; }
-  getAddress() { return this.address; }
-  getEmail() { return this.email; }
-  getPhone() { return this.phone; }
+  getPayment(): TPayment | undefined { return this.payment; }
+  getAddress(): string | undefined { return this.address; }
+  getEmail(): string | undefined  { return this.email; }
+  getPhone(): string | undefined  { return this.phone; }
 }

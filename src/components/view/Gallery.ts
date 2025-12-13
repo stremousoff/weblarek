@@ -6,9 +6,8 @@ export class Gallery extends Component<{cards: HTMLElement[]}> {
     super(container);
   }
 
-  render(data: {cards: HTMLElement[]}): HTMLElement {
+  set renderedCards(cards: HTMLElement[]) {
     this.container.innerHTML = '';
-    data.cards.forEach(card => this.container.appendChild(card));
-    return this.container;
+    this.container.append(...cards)
   }
 }

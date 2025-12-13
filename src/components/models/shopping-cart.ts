@@ -16,18 +16,17 @@ export class ShoppingCart {
     product.price != null
       ? this._cartItems.push(product)
       :   console.log(`Товар ${product} не был добавлен в корзину, отсутствует цена`);
-    this.eventBroker.emit('change:counter', { value: this.getCartTotalQuantity() });
+    this.eventBroker.emit('shoppingCart:update');
   }
 
   removeItemFromCart(product: IProduct) : void {
     this._cartItems= this._cartItems.filter((item) => item.id !== product.id);
-    this.eventBroker.emit('change:counter', { value: this.getCartTotalQuantity() });
-    this.eventBroker.emit('shoppingCart:update', this._cartItems);
+    this.eventBroker.emit('shoppingCart:update');
   }
 
   removeAllItemsFromCart() : void {
     this._cartItems = [];
-    this.eventBroker.emit('change:counter', { value: this.getCartTotalQuantity() });
+    this.eventBroker.emit('shoppingCart:update');
   }
 
   getCartTotalPrice() : number {
