@@ -7,7 +7,6 @@ import {
   IApiProducts,
   IProduct,
   TFormErrors,
-  TOrderResponse,
   TPayment
 } from "./types";
 import {LarekApi} from "./components/api/larek-api.ts";
@@ -83,15 +82,13 @@ eventBroker.on('shoppingCart:update', () => {
   headerView.counter = shoppingCartModel.getCartTotalQuantity();
   headerView.render();
 
-  const cardsBasketEl: HTMLElement[] = shoppingCartModel.getCartItems().map((cartItem, index) => {
+  basketView.renderedCards = shoppingCartModel.getCartItems().map((cartItem, index) => {
     const card = new CardBasket(cloneTemplate(cardBasketTemplate), {
       onClick: () => shoppingCartModel.removeItemFromCart(cartItem)
     });
     card.index = index + 1;
     return card.render(cartItem);
   });
-
-  basketView.setCards(cardsBasketEl);
   basketView.totalPrice = shoppingCartModel.getCartTotalPrice();
   basketView.buttonOrder = shoppingCartModel.getCartTotalQuantity() > 0;
 });
@@ -194,16 +191,16 @@ eventBroker.on('buyer:update', () => {
 
 eventBroker.on('success:show', async () => {
   try {
-    const response: TOrderResponse = await api.postOrder(
+    const response = await api.postOrder(
       {
-        payment: buyerModel.getPayment()!,
+        payment: buyerModel.getPayment() as 'cash' | 'card',
         email: buyerModel.getEmail()!,
         phone: buyerModel.getPhone()!,
         address: buyerModel.getAddress()!,
         total: shoppingCartModel.getCartTotalPrice()!,
         items: shoppingCartModel.getCartItems().map((item: IProduct) => item.id)
       });
-    successView.orderSuccessDescription = response.total;
+    successView.orderSuccessMessage = response.total;
     shoppingCartModel.removeAllItemsFromCart()
     modalView.open(successView.render());
   } catch (error) {

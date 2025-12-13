@@ -33,6 +33,10 @@ export class CardPreview extends CardBase<IProduct> {
     this.cardImage.src = value;
   }
 
+  set description(value: string) {
+    this.cardText.textContent = value;
+  }
+
   set buttonText(value: string) {
     this.clickableEl.textContent = value;
   }

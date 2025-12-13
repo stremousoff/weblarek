@@ -210,3 +210,201 @@ interface IBuyer {
 - `get(): Promise<IApiProducts>` - получает с сервера объект с массивом товаров
 - `post(data: TOrder) : Promise<TOrderResponse>` - отправляет на сервер данные о покупателе и выбранных
   товарах
+
+### Представление
+
+Все классы представления наследуются от родительского класса `Component`.
+
+#### `Header`
+
+**Назначение:** шапка сайта с кнопкой корзины.  
+**Конструктор:**  
+`constructor(container: HTMLElement, event: IEvents)`  
+— принимает контейнер и брокер событий, навешивает обработчик клика на кнопку корзины.
+
+**Свойства:**
+
+- `headerBasket` — кнопка корзины
+- `headerBasketCounter` — счетчик количества товаров
+
+**Методы:**
+
+- `set counter(value: number)` — обновляет число товаров рядом с иконкой корзины
+
+#### `Modal`
+
+**Назначение:** диалоговое окно для отображения контента.  
+**Конструктор:**  
+`constructor(container: HTMLElement)` — принимает контейнер.
+
+**Свойства:**
+
+- `closeBtn` — кнопка закрытия диалогового окна
+- `content` — область для вставки контента
+
+**Методы:**
+
+- `setContent(content: HTMLElement)` - контейнер для отображения контента
+- `open(content: HTMLElement)` — открывает диалоговое окно и устанавливает обработчики события на закрытие окна по клику вне области
+  содержимого окна
+- `close()` — закрывает диалоговое окно и удаляет обработчики события
+
+#### `Gallery`
+
+**Назначение:** контейнер для карточек товаров.  
+**Конструктор:**  
+`constructor(container: HTMLElement)` — задает контейнер.
+
+**Методы:**
+
+- `set renderedCards(cards: HTMLElement[])` — вставляет карточки товаров в контейнер
+
+#### `CardBase`
+
+**Назначение:** Базовый класс карточки товара.  
+**Конструктор:**  
+`constructor(container: HTMLElement)` — принимает контейнер.
+
+**Свойства:**
+
+- `cardTitle: HTMLElement` — заголовок товара
+- `cardPrice: HTMLElement` — цена товара
+
+**Методы:**
+
+- `set title(value: string)` — устанавливает название
+- `set price(value: number | null)` — устанавливает цену
+
+#### `CardBasket`
+
+**Назначение:** Карточки товара в корзине. `Card <- CardBasket`  
+**Конструктор:**  
+`constructor(container: HTMLElement, private action?: ICardAction) ` — принимает контейнер и объект событий
+
+**Свойства:**
+
+- `indexItem: HTMLElement` — порядковый номер в корзине
+- `clickableEl: HTMLButtonElement` — кнопка удаления товара из корзины
+
+**Методы:**
+
+- `set index(value: number)` — устанавливает порядковый номер
+
+#### `CardCatalog`
+
+**Назначение:** Карточки товара в каталоге. `CardView <- CardCatalog`  
+**Конструктор:**  
+`constructor(container: HTMLElement, private action?: ICardAction) ` — принимает контейнер и объект событий
+
+**Свойства:**
+
+- `cardCategory: HTMLElement` — категория товара
+- `cardImage: HTMLImageElement` — изображение товара
+- `clickableEl` — слушатель клика на карточку
+
+**Методы:**
+
+- `category(value: string) ` — задает категорию и соответствующий модификатор
+- `set image(value: string)` — устанавливает адрес изображения товара
+
+#### `CardPreview`
+
+**Назначение:** Карточки товара в каталоге. `CardView <- CardPreview`  
+**Конструктор:**  
+`constructor(container: HTMLElement, private event: IEvents) ` — принимает контейнер и объект событий
+
+**Свойства:**
+
+- `cardCategory: HTMLElement` — категория товара
+- `cardImage: HTMLElement` — изображение товара
+- `cardText: HTMLElement` — описание товара
+- `clickableEl: HTMLElement` — кнопка добавления или удаления товара из корзины
+
+**Методы:**
+
+- `set buttonDisabled(value: boolean)` — блокирует кнопку добавления в корзину, если товар уже в корзине
+- `set buttonText(value: string)` — устанавливает текст кнопки
+- `set description(value: string)` — устанавливает описание товара
+- `set category(value: string)` — задает категорию и соответствующий модификатор
+- `set image(value: string) ` — устанавливает адрес изображения товара
+
+#### `Basket`
+
+**Назначение:** Корзина.  
+**Конструктор:**  
+`constructor(container: HTMLElement, private events: IEvents)` — принимает контейнер и брокер событий.
+
+**Свойства:**
+
+- `basketList` — контейнер для отображения списка товаров
+- `basketButton` — кнопка оформления товаров из корзины
+- `basketPrice` — итоговая сумма
+
+**Методы:**
+
+- `set totalPrice(value: number)` — обновляет итоговую сумму
+- `set buttonOrder(enabled: boolean)` - делает доступной кнопку
+- `set renderedCards(cards: HTMLElement[])` — выводит список товаров
+
+#### `Form`
+
+**Назначение:** Базовый класс формы.  
+**Конструктор:**  
+`constructor(container: HTMLElement) ` — принимает контейнер и объект с действиями
+
+**Свойства:**
+
+- `formErrors: HTMLElement` — элемент для вывода ошибки
+- `submitButton: HTMLButtonElement` — кнопка отправки формы
+
+**Методы:**
+
+- `showErrors(errors: Partial<TFormErrors>)` — устанавливает ошибку
+- `submitButtonEnable(enabled: boolean)` — переключатель доступности кнопки 
+
+#### `OrderForm`
+
+**Назначение:** Первый шаг оформления заказа. `FormView <- OrderForm`  
+**Конструктор:**  
+`constructor(container: HTMLElement, private event: IEvents)` — принимает контейнер и брокер событий
+
+**Свойства:**
+
+- `paymentButtons: HTMLButtonElement[]` — кнопки выбора способа оплаты
+- `addressInput: HTMLInputElement;` — инпут ввода адреса
+
+**Методы:**
+
+- `setPaymentButtonActive(payment: TPayment)` — делает активной кнопку выбора оплаты
+- `setAddress(value: string)` — заполняет инпут с адресом
+
+#### `ContactsForm`
+
+**Назначение:** Второй шаг оформления заказа. `FormView <- ContactsForm`  
+**Конструктор:**  
+`constructor(container: HTMLElement, private event: IEvents)` — принимает контейнер и брокер событий
+
+**Свойства:**
+
+- `emailInput: HTMLInputElement` — инпут ввода почты
+- `phoneInput: HTMLInputElement` — инпут ввода телефона
+
+**Методы:**
+
+- `setEmail(value: string)` — заполняет инпут с почтой
+- `setPhone(value: string)` — заполняет инпут с телефоном
+
+#### `OrderSuccess`
+
+**Назначение:** Сообщение об успешной оплате  
+**Конструктор:**  
+`constructor(container: HTMLElement, private event: IEvents) ` — принимает контейнер и брокер событий
+
+**Свойства:**
+
+- `orderSuccessDescription: HTMLElement` — элемент отображает, на какую сумму был оформлен заказ
+- `orderSuccessClose: HTMLButtonElement` — кнопка закрытия
+
+**Методы:**
+
+- `set orderSuccessMessage(value: number)` — устанавливает общую сумму заказа

@@ -17,7 +17,7 @@ export abstract class BaseForm extends Component<null> {
   showErrors(errors: Partial<TFormErrors>): boolean {
     const relevantErrors = this.formErrorsFields.map(f => errors[f]).filter(Boolean);
     this.formErrors.textContent = relevantErrors.length === 1 ? relevantErrors[0]! : '';
-    return relevantErrors.length === 0; // true, если ошибок нет
+    return relevantErrors.length === 0;
   }
 
 
